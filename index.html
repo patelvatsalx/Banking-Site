@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Banking Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-building-columns"></i>
+                <h2>FinBank</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" id="nav-dashboard"><i class="fas fa-chart-pie"></i> Dashboard</a>
+                <a href="#" class="nav-item" id="nav-accounts"><i class="fas fa-wallet"></i> Accounts</a>
+                <a href="#" class="nav-item" id="nav-transactions"><i class="fas fa-exchange-alt"></i> Transactions</a>
+                <a href="#" class="nav-item" id="nav-transfer"><i class="fas fa-money-bill-transfer"></i> Transfer Money</a>
+                <a href="#" class="nav-item" id="nav-cards"><i class="fas fa-credit-card"></i> Cards</a>
+                <a href="#" class="nav-item" id="nav-loans"><i class="fas fa-hand-holding-dollar"></i> Loans</a>
+                <a href="#" class="nav-item" id="nav-investments"><i class="fas fa-chart-line"></i> Investments</a>
+                <a href="#" class="nav-item" id="nav-settings"><i class="fas fa-cog"></i> Settings</a>
+            </nav>
+            <div class="logout-container">
+                <a href="#" class="nav-item logout" id="nav-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Navbar -->
+            <header class="top-navbar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="global-search" placeholder="Search transactions, accounts, etc.">
+                </div>
+                <div class="user-actions">
+                    <div class="notification" id="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" id="notification-count">3</span>
+                    </div>
+                    <div class="user-profile" id="user-profile-btn">
+                        <img src="https://ui-avatars.com/api/?name=John+Doe&background=0D8ABC&color=fff" alt="User Profile" class="profile-img" id="user-avatar">
+                        <div class="user-info">
+                            <span class="welcome-text">Welcome back,</span>
+                            <span class="username" id="current-username">John Doe</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-body">
+                <div class="left-column">
+                    <!-- Account Summary Cards -->
+                    <section class="summary-section" id="account-summary">
+                        <div class="summary-card primary">
+                            <div class="card-icon"><i class="fas fa-wallet"></i></div>
+                            <div class="card-details">
+                                <h3>Current Balance</h3>
+                                <h2 id="current-balance"></h2>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="card-icon"><i class="fas fa-piggy-bank"></i></div>
+                            <div class="card-details">
+                                <h3>Savings Balance</h3>
+                                <h2 id="savings-balance">$12,450.50</h2>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="card-icon"><i class="fas fa-vault"></i></div>
+                            <div class="card-details">
+                                <h3>Fixed Deposit</h3>
+                                <h2 id="fixed-deposit">$50,000.00</h2>
+                            </div>
+                        </div>
+                        <div class="summary-card alert">
+                            <div class="card-icon"><i class="fas fa-credit-card"></i></div>
+                            <div class="card-details">
+                                <h3>Credit Card Outstanding</h3>
+                                <h2 id="credit-outstanding">$1,240.25</h2>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Quick Action Buttons -->
+                    <section class="quick-actions" id="quick-actions">
+                        <h3>Quick Actions</h3>
+                        <div class="action-grid">
+                            <button class="action-btn" id="action-send-money"><i class="fas fa-paper-plane"></i> Send Money</button>
+                            <button class="action-btn" id="action-receive-money"><i class="fas fa-download"></i> Receive Money</button>
+                            <button class="action-btn" id="action-pay-bills"><i class="fas fa-file-invoice-dollar"></i> Pay Bills</button>
+                            <button class="action-btn" id="action-recharge"><i class="fas fa-mobile-alt"></i> Recharge</button>
+                            <button class="action-btn" id="action-request-loan"><i class="fas fa-hand-holding-usd"></i> Request Loan</button>
+                        </div>
+                    </section>
+
+                    <div class="middle-grid">
+                        <!-- Cards Section -->
+                        <section class="cards-section" id="user-cards">
+                            <div class="section-header">
+                                <h3>My Cards</h3>
+                                <a href="#" class="view-all" id="view-all-cards">View All</a>
+                            </div>
+                            <div class="cards-container">
+                                <!-- Debit Card -->
+                                <div class="credit-card debit" id="debit-card-1">
+                                    <div class="card-top">
+                                        <i class="fas fa-microchip chip"></i>
+                                        <i class="fab fa-cc-visa logo"></i>
+                                    </div>
+                                    <div class="card-number" id="debit-card-number">**** **** **** 4289</div>
+                                    <div class="card-bottom">
+                                        <div class="card-holder">
+                                            <span>Card Holder</span>
+                                            <div id="debit-card-name"></div>
+                                        </div>
+                                        <div class="card-expires">
+                                            <span>Expires</span>
+                                            <div id="debit-card-expiry">12/28</div>
+                                        </div>
+                                    </div>
+                                    <div class="card-type">Debit</div>
+                                </div>
+                                <!-- Credit Card -->
+                                <div class="credit-card credit" id="credit-card-1">
+                                    <div class="card-top">
+                                        <i class="fas fa-microchip chip"></i>
+                                        <i class="fab fa-cc-mastercard logo"></i>
+                                    </div>
+                                    <div class="card-number" id="credit-card-number">**** **** **** 8834</div>
+                                    <div class="card-bottom">
+                                        <div class="card-holder">
+                                            <span>Card Holder</span>
+                                            <div id="credit-card-name">JOHN DOE</div>
+                                        </div>
+                                        <div class="card-expires">
+                                            <span>Expires</span>
+                                            <div id="credit-card-expiry">09/27</div>
+                                        </div>
+                                    </div>
+                                    <div class="card-type">Credit</div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Analytics Section -->
+                        <section class="analytics-section" id="analytics-overview">
+                            <div class="section-header">
+                                <h3>Analytics</h3>
+                            </div>
+                            <div class="analytics-grid">
+                                <div class="analytic-card" id="analytics-income">
+                                    <div class="analytic-header">
+                                        <span>Income</span>
+                                        <i class="fas fa-arrow-trend-up positive"></i>
+                                    </div>
+                                    <h4 id="income-amount">$8,500.00</h4>
+                                    <p class="positive-trend">+12% from last month</p>
+                                </div>
+                                <div class="analytic-card" id="analytics-expenses">
+                                    <div class="analytic-header">
+                                        <span>Expenses</span>
+                                        <i class="fas fa-arrow-trend-down negative"></i>
+                                    </div>
+                                    <h4 id="expense-amount">$3,200.00</h4>
+                                    <p class="negative-trend">-5% from last month</p>
+                                </div>
+                                <div class="analytic-card full-width" id="analytics-chart">
+                                    <div class="analytic-header">
+                                        <span>Monthly Spending</span>
+                                    </div>
+                                    <!-- Placeholder for chart -->
+                                    <div class="chart-placeholder">
+                                        <div class="bar" style="height: 40%"></div>
+                                        <div class="bar" style="height: 60%"></div>
+                                        <div class="bar" style="height: 30%"></div>
+                                        <div class="bar" style="height: 80%"></div>
+                                        <div class="bar" style="height: 50%"></div>
+                                        <div class="bar" style="height: 90%"></div>
+                                        <div class="bar" style="height: 45%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Transaction History Table -->
+                    <section class="transactions-section" id="recent-transactions">
+                        <div class="section-header">
+                            <h3>Recent Transactions</h3>
+                            <a href="#" class="view-all" id="view-all-transactions">View All</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="transaction-table" id="transaction-history-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Receiver/Sender</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id = "transaction-list">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Right Panel -->
+                <aside class="right-panel" id="sidebar-widgets">
+                    <!-- Loan Status Section -->
+                    <section class="panel-section loan-status" id="loan-widget">
+                        <h3>Loan Status</h3>
+                        <div class="loan-card" id="active-loan-1">
+                            <div class="loan-header">
+                                <div>
+                                    <h4>Home Loan</h4>
+                                    <span class="loan-id" id="loan-id-label">#LN-84736</span>
+                                </div>
+                                <span class="badge-active">Active</span>
+                            </div>
+                            <div class="loan-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 35%;" id="loan-progress-bar"></div>
+                                </div>
+                                <div class="progress-text">
+                                    <span id="loan-progress-text">35% Paid</span>
+                                </div>
+                            </div>
+                            <div class="loan-details">
+                                <div class="detail-item">
+                                    <span>EMI Amount</span>
+                                    <h5 id="loan-emi-amount">$1,250.00 /mo</h5>
+                                </div>
+                                <div class="detail-item">
+                                    <span>Remaining</span>
+                                    <h5 id="loan-remaining-amount">$145,000.00</h5>
+                                </div>
+                            </div>
+                            <button class="pay-now-btn" id="action-pay-emi">Pay EMI Now</button>
+                        </div>
+                    </section>
+
+                    <!-- Recent Notifications -->
+                    <section class="panel-section notifications" id="notifications-widget">
+                        <h3>Recent Notifications</h3>
+                        <div class="notification-list" id="notification-list-container">
+                            <div class="notification-item" id="notif-1">
+                                <div class="icon-circle bg-light-blue">
+                                    <i class="fas fa-shield-alt text-blue"></i>
+                                </div>
+                                <div class="notif-content">
+                                    <h4>Security Alert</h4>
+                                    <p>New login from Chrome on Windows</p>
+                                    <span class="time">2 hours ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Offers -->
+                    <section class="panel-section offers" id="offers-widget">
+                        <h3>Special Offers</h3>
+                        <div class="offer-card" id="offer-1">
+                            <div class="offer-icon">
+                                <i class="fas fa-percent"></i>
+                            </div>
+                            <div class="offer-details">
+                                <h4>Cashback Offer</h4>
+                                <p>Get 5% cashback on utility bill payments this month.</p>
+                                <a href="#" class="offer-link" id="action-claim-offer">Claim Now</a>
+                            </div>
+                        </div>
+                    </section>
+                </aside>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
