@@ -163,9 +163,23 @@ renderBalance()
     let ans = Math.ceil(interest)
 
     let display = document.getElementById("income-amount").textContent = "$" + ans;
-    console.log(display)
+    // console.log(display)
  }
  interestonsavings()
+
+ function interestonFD(){
+    let getFD = parseFloat(document.getElementById("fixed-deposit").textContent.replace("$","").replace(",", ""));
+
+    let amount = getFD;
+    let time = 1;
+    let rate = 1;
+
+    let interest = amount * time * rate /100
+    let ans = Math.ceil(interest)
+
+    let display = document.getElementById("expense-amount").textContent = "$" + ans;
+ }
+ interestonFD()
 
 
 
