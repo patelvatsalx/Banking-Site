@@ -100,14 +100,14 @@ renderBalance()
 
 // function limit(){
 //     if (balance >= 1000){
-//         alert("Your Balance limit is over")
+//         alert("Your Balance limit is over 1000000 so extra money will be added to your saving balance")
 //     }
 // }
 // limit()
 
 // function lowerlimit(){
 //     if (balance <= 100){
-//         alert("Your minimum Balance required is 100 ")
+//         alert("minimum Balance required is 100 ")
 //     }
 // }
 // lowerlimit()
@@ -116,21 +116,58 @@ renderBalance()
 
 
  function savings(){
-    var savingBalanceElement = document.getElementById("credit-outstanding")
-    console.log(savingBalanceElement)
+    var savingBalanceElement = document.getElementById("savings-balance")
     var savingBalance = parseFloat(
     savingBalanceElement.textContent.replace("$", "").replace(",", "")
     
 )
-    console.log(savingBalance.toFixed(2))
-    if(totalBalance.balance >= 100000){
-    let extra = totalBalance.balance - 100000;
+    if(totalBalance.balance >= 1000000){
+    let extra = totalBalance.balance - 1000000;
     savingBalance += extra
-    totalBalance.balance = 100000;
+    totalBalance.balance = 1000000;
+    
 
-    savingBalanceElement.textContent = `$${savingBalance}`
+    savingBalanceElement.textContent = `$${savingBalance.toFixed(2)}`
+    renderBalance()
 }
  }
  savings()
+
+
+
+ function deductcredit(){
+    const now = new Date();
+
+    //credit Outstanding Value
+    let value = parseFloat(document.getElementById("credit-outstanding").textContent.replace("$", "").replace(",", ""));
+    
+
+    if (now.getDay() === 8){
+        totalBalance.balance -= value;
+        document.getElementById("credit-outstanding").textContent = "$0.00";
+        renderBalance();
+        console.log("Credit card outstanding cleared: $" + value);
+    }
+ }
+ setInterval(deductcredit, 1000)
+
+
+ function interestonsavings(){
+   
+      
+    let amount = totalBalance.balance;
+    let time = 1;
+    let rate = 1;
+
+    let interest = amount * time * rate /100
+    let ans = Math.ceil(interest)
+
+    let display = document.getElementById("income-amount").textContent = "$" + ans;
+    console.log(display)
+ }
+ interestonsavings()
+
+
+
 
 
