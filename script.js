@@ -26,7 +26,7 @@ const transactions = [
   }
 ];
 let totalBalance = {
-    balance: 1000000.00
+    balance: 1000011.00
 }
 
 //Debit Card Elements Selected
@@ -183,5 +183,65 @@ renderBalance()
 
 
 
+ function sendMoney() {
+    const profileBtn = document.getElementById('action-send-money');
+
+    profileBtn.addEventListener('dblclick', function () {
+
+        const img = document.createElement('img');
+        img.src = 'image.png';
+        img.alt = 'Displayed on double-click';
+
+        img.style.width = '500px';
+        img.style.height = '500px';
+        img.style.position = 'fixed';
+        img.style.top = '50%';
+        img.style.left = '50%';
+        img.style.transform = 'translate(-50%, -50%)';
+        img.style.zIndex = '1000';
+        img.style.border = '2px solid #000';
+
+        document.body.appendChild(img);
+
+        img.addEventListener('click', function () {
+            document.body.removeChild(img);
+        });
+
+    });
+}
+
+sendMoney();
+
+function takeLoan(){
+    let select = document.getElementById("action-request-loan")
+    select.addEventListener("click", () =>{
+        console.log(select)
+        
+        let salaryInput = prompt("Enter Monthly Salary")
+        let salary = Number(salaryInput)
+        
+        if (salaryInput === null) {
+            // user cancelled prompt
+            return
+        }
+        
+        if (Number.isNaN(salary) || salary <= 0) {
+            alert("Please enter a valid numeric salary greater than 0.")
+            return
+        }
+        
+        // Note: No salary display element exists in HTML
+        // document.getElementById("salary").textContent = `$${salary.toFixed(2)}`;
 
 
+        //Eligiblity Criteria
+        if(salary >= 30000){        
+            alert("You are Eligible for Loan")
+        }
+        else{
+            alert("You are not eligible for Loan")
+        }
+
+    })
+}
+takeLoan()
