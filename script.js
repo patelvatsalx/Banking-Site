@@ -1,3 +1,5 @@
+
+
 const debitCard = {
     name: "Vatsu",
     number: "**** **** **** 4289",
@@ -186,7 +188,7 @@ renderBalance()
  function sendMoney() {
     const profileBtn = document.getElementById('action-send-money');
 
-    profileBtn.addEventListener('dblclick', function () {
+    profileBtn.addEventListener('click', function () {
 
         const img = document.createElement('img');
         img.src = 'image.png';
@@ -215,13 +217,11 @@ sendMoney();
 function takeLoan(){
     let select = document.getElementById("action-request-loan")
     select.addEventListener("click", () =>{
-        console.log(select)
         
         let salaryInput = prompt("Enter Monthly Salary")
         let salary = Number(salaryInput)
         
         if (salaryInput === null) {
-            // user cancelled prompt
             return
         }
         
@@ -229,10 +229,6 @@ function takeLoan(){
             alert("Please enter a valid numeric salary greater than 0.")
             return
         }
-        
-        // Note: No salary display element exists in HTML
-        // document.getElementById("salary").textContent = `$${salary.toFixed(2)}`;
-
 
         //Eligiblity Criteria
         if(salary >= 30000){        
@@ -245,3 +241,36 @@ function takeLoan(){
     })
 }
 takeLoan()
+
+function recharge(){
+    let select = document.getElementById("action-recharge");
+    if (select) { 
+        select.addEventListener("click", ()=>{
+            let phoneNumber = prompt("Enter phone number to recharge:");
+            if (phoneNumber) {
+                const newTransaction = {
+                    date: new Date().toLocaleDateString(),
+                    name: "Phone Recharge",
+                    type: "Recharge",
+                    amount: -50,
+                    status: "Completed"
+                };
+                transactions.push(newTransaction);
+                totalBalance.balance += newTransaction.amount;
+                renderBalance();
+                renderTransaction();
+            }
+        });
+    }
+}
+recharge()
+
+function payEmi(){
+    let select = document.getElementById("action-pay-emi")
+    select.addEventListener("click", ()=>{
+        if (confirm("Amount will be Deducted Balance")){
+            console.log("User Clicked")
+        }
+    })
+}
+payEmi()
