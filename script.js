@@ -267,10 +267,29 @@ recharge()
 
 function payEmi(){
     let select = document.getElementById("action-pay-emi")
+    let value = parseFloat(document.getElementById("loan-remaining-amount").textContent.replace("$", "").replace(",", ""))
+    
+
     select.addEventListener("click", ()=>{
-        if (confirm("Amount will be Deducted Balance")){
-            console.log("User Clicked")
+        let ask = confirm("Amount will be Deducted Balance")
+        if (ask){
+            let deduct = totalBalance.balance - value;
+            const newTransaction = {
+                    date: new Date().toLocaleDateString(),
+                    name: "EMI Paid",
+                    type: "EMI",
+                    amount: -145000,
+                    status: "Completed"
+                };
+                transactions.push(newTransaction)
+                totalBalance.balance += newTransaction.amount;
+                console.log(totalBalance.balance)
+
+                renderBalance()
+                renderTransaction()
+            
         }
     })
 }
 payEmi()
+855000
