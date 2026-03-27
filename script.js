@@ -1,6 +1,4 @@
-
-
-const debitCard = {
+﻿const debitCard = {
     name: "Vatsu",
     number: "**** **** **** 4289",
     expiry: "12/28"
@@ -11,189 +9,168 @@ const creditCard = {
     number: "**** **** **** 8834",
     expiry: "09/27"
 };
+
 const transactions = [
-  {
-    date: "Oct 24, 2023",
-    name: "Amazon Purchases",
-    type: "Shopping",
-    amount: 120.50,
-    status: "Completed"
-  },
-  {
-    date: "Oct 23, 2023",
-    name: "TechCorp Inc.",
-    type: "Salary",
-    amount: "+$4500.00",
-    status: "Completed"
-  }
+    { date: "Oct 24, 2023", name: "Amazon Purchases", type: "Shopping", amount: -120.50, status: "Completed" },
+    { date: "Oct 23, 2023", name: "TechCorp Inc.", type: "Salary", amount: 4500.00, status: "Completed" }
 ];
-let totalBalance = {
-    balance: 1000011.00
-}
 
-//Debit Card Elements Selected
-let Debit_card_name = document.getElementById("debit-card-name").textContent = debitCard.name;
-let Debit_card_expiry = document.getElementById("debit-card-expiry").textContent = debitCard.expiry;
-let Debit_card_Number = document.getElementById("debit-card-number").textContent= debitCard.number;
+const totalBalance = { balance: 1000000.00 };
 
-//Credit Card Elements Selected
-let Credit_card_name = document.getElementById("credit-card-name").textContent = creditCard.name;
-let Credit_card_Number = document.getElementById("credit-card-number").textContent = creditCard.number;
-let Credit_card_expiry = document.getElementById("credit-card-expiry").textContent = creditCard.expiry;
+const STORAGE_KEYS = {
+    BALANCE: 'bank_total_balance_session',
+    TRANSACTIONS: 'bank_transactions_session'
+};
 
-//Getting Balance From Object
-let balance = document.getElementById("current-balance").textContent = totalBalance.balance;
+const transactionList = document.getElementById('transaction-list');
 
-const transactionList = document.getElementById("transaction-list");
-
-transactions.forEach(item => {
-    transactionList.innerHTML += `
-    <tr>
-      <td>${item.date}</td>
-      <td>${item.name}</td>
-      <td>${item.type}</td>
-      <td>$${item.amount}</td>
-      <td>${item.status}</td>
-    </tr>
-    `;
-});
-
-//Adding Transaction to the Recent Transcation list
-function addTransaction(){
-
-    const newTransaction = {
-        date: "8 Feb 2025",
-        name: "Netflix",
-        type: "Recharge",
-        amount: +90,
-        status: "Completed"
+function loadState() {
+    const storedBalance = sessionStorage.getItem(STORAGE_KEYS.BALANCE);
+    if (storedBalance !== null && !Number.isNaN(Number(storedBalance))) {
+        totalBalance.balance = Number(storedBalance);
     }
-    transactions.push(newTransaction)
-    totalBalance.balance += newTransaction.amount
-    renderBalance()
-    renderTransaction()
+    
+
+    const storedTransactions = sessionStorage.getItem(STORAGE_KEYS.TRANSACTIONS);
+    if (storedTransactions) {
+        try {
+            const parsed = JSON.parse(storedTransactions);
+            if (Array.isArray(parsed)) {
+                transactions.length = 0;
+                transactions.push(...parsed);
+            }
+        } catch (error) {
+            console.warn('Could not parse stored transactions', error);
+        }
+    }
+}
+loadState()
+
+function saveState() {
+    sessionStorage.setItem(STORAGE_KEYS.BALANCE, totalBalance.balance.toString());
+    sessionStorage.setItem(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(transactions));
 }
 
-addTransaction()
-
-//Displaying the Transaction on the Screens
-function renderTransaction() {
-    transactionList.innerHTML = "";
-
-    transactions.forEach(item => {
-        transactionList.innerHTML += `
-        <tr>
-          <td>${item.date}</td>
-          <td>${item.name}</td>
-          <td>${item.type}</td>
-          <td>${item.amount}</td>
-          <td>${item.status}</td>
-        </tr>
-        `;
+function renderBalance() {
+    const current = Number(totalBalance.balance);
+    const safeBalance = Number.isNaN(current) ? 0 : current;
+    const formatted = safeBalance.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
     });
-}
-
-function renderBalance(){
-    document.getElementById("current-balance").textContent = `$${totalBalance.balance}`
+    const element = document.getElementById('current-balance');
+    if (element) {
+        element.textContent = `$${formatted}`;
+    }
 }
 renderBalance()
 
- 
-
-// function limit(){
-//     if (balance >= 1000){
-//         alert("Your Balance limit is over 1000000 so extra money will be added to your saving balance")
-//     }
-// }
-// limit()
-
-// function lowerlimit(){
-//     if (balance <= 100){
-//         alert("minimum Balance required is 100 ")
-//     }
-// }
-// lowerlimit()
-
-//12450
-
-
- function savings(){
-    var savingBalanceElement = document.getElementById("savings-balance")
-    var savingBalance = parseFloat(
-    savingBalanceElement.textContent.replace("$", "").replace(",", "")
-    
-)
-    if(totalBalance.balance >= 1000000){
-    let extra = totalBalance.balance - 1000000;
-    savingBalance += extra
-    totalBalance.balance = 1000000;
-    
-
-    savingBalanceElement.textContent = `$${savingBalance.toFixed(2)}`
-    renderBalance()
+function renderTransaction() {
+    if (!transactionList) return;
+    transactionList.innerHTML = '';
+    transactions.forEach(item => {
+        const formattedAmount = Number(item.amount).toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        const sign = item.amount < 0 ? '-' : '+';
+        transactionList.innerHTML += `
+            <tr>
+                <td>${item.date}</td>
+                <td>${item.name}</td>
+                <td>${item.type}</td>
+                <td>${sign}$${Math.abs(formattedAmount)}</td>
+                <td>${item.status}</td>
+            </tr>`;
+    });
 }
- }
- savings()
+renderTransaction()
 
-
-
- function deductcredit(){
-    const now = new Date();
-
-    //credit Outstanding Value
-    let value = parseFloat(document.getElementById("credit-outstanding").textContent.replace("$", "").replace(",", ""));
-    
-
-    if (now.getDay() === 8){
-        totalBalance.balance -= value;
-        document.getElementById("credit-outstanding").textContent = "$0.00";
-        renderBalance();
-        console.log("Credit card outstanding cleared: $" + value);
+function updateBalance(amountChange) {
+    totalBalance.balance = Number(totalBalance.balance) + Number(amountChange);
+    if (Number.isNaN(totalBalance.balance)) {
+        totalBalance.balance = 0;
     }
- }
- setInterval(deductcredit, 1000)
+    renderBalance();
+    saveState();
+}
 
+function initializeCardDetails() {
+    document.getElementById('debit-card-name').textContent = debitCard.name;
+    document.getElementById('debit-card-expiry').textContent = debitCard.expiry;
+    document.getElementById('debit-card-number').textContent = debitCard.number;
 
- function interestonsavings(){
-   
-      
-    let amount = totalBalance.balance;
-    let time = 1;
-    let rate = 1;
+    document.getElementById('credit-card-name').textContent = creditCard.name;
+    document.getElementById('credit-card-expiry').textContent = creditCard.expiry;
+    document.getElementById('credit-card-number').textContent = creditCard.number;
+}
+initializeCardDetails()
 
-    let interest = amount * time * rate /100
-    let ans = Math.ceil(interest)
+function addTransaction() {
+    const newTransaction = {
+        date: new Date().toLocaleDateString(),
+        name: 'Netflix',
+        type: 'Recharge',
+        amount: -90,
+        status: 'Completed'
+    };
+    transactions.push(newTransaction);
+    updateBalance(newTransaction.amount);
+    renderTransaction();
+}
 
-    let display = document.getElementById("income-amount").textContent = "$" + ans;
-    // console.log(display)
- }
- interestonsavings()
+// remove auto-invocation so the balance doesn't drift on reload.
+// Call addTransaction() only when user purposely triggers it.
 
- function interestonFD(){
-    let getFD = parseFloat(document.getElementById("fixed-deposit").textContent.replace("$","").replace(",", ""));
+function savings() {
+    const savingBalanceElement = document.getElementById('savings-balance');
+    if (!savingBalanceElement) return;
+    let savingBalance = parseFloat(savingBalanceElement.textContent.replace('$', '').replace(',', '')) || 0;
 
-    let amount = getFD;
-    let time = 1;
-    let rate = 1;
+    if (totalBalance.balance >= 1000000) {
+        const extra = totalBalance.balance - 1000000;
+        savingBalance += extra;
+        totalBalance.balance = 1000000;
+        savingBalanceElement.textContent = `$${savingBalance.toFixed(2)}`;
+        renderBalance();
+        saveState();
+    }
+}
+savings()
 
-    let interest = amount * time * rate /100
-    let ans = Math.ceil(interest)
+function deductcredit() {
+    const now = new Date();
+    const value = parseFloat(document.getElementById('credit-outstanding').textContent.replace('$', '').replace(',', '')) || 0;
 
-    let display = document.getElementById("expense-amount").textContent = "$" + ans;
- }
- interestonFD()
+    if (now.getDay() === 8 && value > 0) {
+        updateBalance(-value);
+        document.getElementById('credit-outstanding').textContent = '$0.00';
+        console.log('Credit card outstanding cleared: $' + value);
+    }
+}
+deductcredit()
 
+function interestonsavings() {
+    const amount = totalBalance.balance;
+    const interest = amount * 1 * 1 / 100;
+    document.getElementById('income-amount').textContent = `$${Math.ceil(interest)}`;
+}
+interestonsavings()
 
+function interestonFD() {
+    const fdAmount = parseFloat(document.getElementById('fixed-deposit').textContent.replace('$', '').replace(',', '')) || 0;
+    const interest = fdAmount * 1 * 1 / 100;
+    document.getElementById('expense-amount').textContent = `$${Math.ceil(interest)}`;
+}
+interestonFD()
 
- function sendMoney() {
+function sendMoney() {
     const profileBtn = document.getElementById('action-send-money');
-
+    if (!profileBtn) return;
     profileBtn.addEventListener('click', function () {
-
         const img = document.createElement('img');
         img.src = 'image.png';
         img.alt = 'Displayed on double-click';
-
         img.style.width = '500px';
         img.style.height = '500px';
         img.style.position = 'fixed';
@@ -202,94 +179,84 @@ renderBalance()
         img.style.transform = 'translate(-50%, -50%)';
         img.style.zIndex = '1000';
         img.style.border = '2px solid #000';
-
         document.body.appendChild(img);
-
-        img.addEventListener('click', function () {
-            document.body.removeChild(img);
-        });
-
+        img.addEventListener('click', function () { document.body.removeChild(img); });
     });
 }
+sendMoney()
 
-sendMoney();
-
-function takeLoan(){
-    let select = document.getElementById("action-request-loan")
-    select.addEventListener("click", () =>{
-        
-        let salaryInput = prompt("Enter Monthly Salary")
-        let salary = Number(salaryInput)
-        
-        if (salaryInput === null) {
-            return
-        }
-        
+function takeLoan() {
+    const select = document.getElementById('action-request-loan');
+    if (!select) return;
+    select.addEventListener('click', () => {
+        const salaryInput = prompt('Enter Monthly Salary');
+        if (salaryInput === null) return;
+        const salary = Number(salaryInput);
         if (Number.isNaN(salary) || salary <= 0) {
-            alert("Please enter a valid numeric salary greater than 0.")
-            return
+            alert('Please enter a valid numeric salary greater than 0.');
+            return;
         }
-
-        //Eligiblity Criteria
-        if(salary >= 30000){        
-            alert("You are Eligible for Loan")
-        }
-        else{
-            alert("You are not eligible for Loan")
-        }
-
-    })
+        alert(salary >= 30000 ? 'You are Eligible for Loan' : 'You are not eligible for Loan');
+    });
 }
 takeLoan()
 
-function recharge(){
-    let select = document.getElementById("action-recharge");
-    if (select) { 
-        select.addEventListener("click", ()=>{
-            let phoneNumber = prompt("Enter phone number to recharge:");
-            if (phoneNumber) {
-                const newTransaction = {
-                    date: new Date().toLocaleDateString(),
-                    name: "Phone Recharge",
-                    type: "Recharge",
-                    amount: -50,
-                    status: "Completed"
-                };
-                transactions.push(newTransaction);
-                totalBalance.balance += newTransaction.amount;
-                renderBalance();
-                renderTransaction();
-            }
-        });
-    }
+function recharge() {
+    const select = document.getElementById('action-recharge');
+    if (!select) return;
+    select.addEventListener('click', () => {
+        const phoneNumber = prompt('Enter phone number to recharge:');
+        if (!phoneNumber) return;
+        const newTransaction = {
+            date: new Date().toLocaleDateString(),
+            name: 'Phone Recharge',
+            type: 'Recharge',
+            amount: -50,
+            status: 'Completed'
+        };
+        transactions.push(newTransaction);
+        updateBalance(newTransaction.amount);
+        renderTransaction();
+    });
 }
 recharge()
 
-function payEmi(){
-    let select = document.getElementById("action-pay-emi")
-    let value = parseFloat(document.getElementById("loan-remaining-amount").textContent.replace("$", "").replace(",", ""))
-    
-
-    select.addEventListener("click", ()=>{
-        let ask = confirm("Amount will be Deducted Balance")
-        if (ask){
-            let deduct = totalBalance.balance - value;
-            const newTransaction = {
-                    date: new Date().toLocaleDateString(),
-                    name: "EMI Paid",
-                    type: "EMI",
-                    amount: -145000,
-                    status: "Completed"
-                };
-                transactions.push(newTransaction)
-                totalBalance.balance += newTransaction.amount;
-                console.log(totalBalance.balance)
-
-                renderBalance()
-                renderTransaction()
-            
-        }
-    })
+function payEmi() {
+    const select = document.getElementById('action-pay-emi');
+    if (!select) return;
+    const value = parseFloat(document.getElementById('loan-remaining-amount').textContent.replace('$', '').replace(',', '')) || 0;
+    select.addEventListener('click', () => {
+        if (!confirm('Amount will be Deducted Balance')) return;
+        const newTransaction = {
+            date: new Date().toLocaleDateString(),
+            name: 'EMI Paid',
+            type: 'EMI',
+            amount: -145000,
+            status: 'Completed'
+        };
+        transactions.push(newTransaction);
+        updateBalance(newTransaction.amount);
+        renderTransaction();
+    });
 }
 payEmi()
-855000
+
+function setPin(){
+    let select = document.getElementById('action-set-pin')
+    select.addEventListener("click", ()=>{
+
+        let enter = prompt("Enter 6 digit Pin")
+        if (enter.length == 6){
+            console.log("Pin Entered Correctly")
+
+            let enter2 = prompt("Enter Same Pin Again")
+            if (enter.length == 6){
+            console.log("Pin Entered Correctly")
+        }
+        alert("Pin Set Successfully")
+        }
+        else alert("You have to enter 6 digit pin")
+
+    })
+}
+setPin()
